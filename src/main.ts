@@ -114,7 +114,6 @@ function main(config: ClashConfig): ClashConfig {
     const globalProxies = proxyGroups.map((item) => String(item.name));
     proxyGroups.push({
         name: PROXY_GROUPS.GLOBAL,
-        icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Global.png`,
         "include-all": true,
         type: "select",
         proxies: globalProxies,
