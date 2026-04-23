@@ -18,8 +18,7 @@ https://github.com/powerfullz/override-rules
 */
 
 import {
-    CDN_URL,
-    FAKE_IP_FILTER,
+    FAKE_IP_FILTER,  // 已清理未使用到的 CDN_URL 导入
     geoxURL,
     PROXY_GROUPS,
     ruleProviders,
@@ -77,7 +76,7 @@ function main(config: ClashConfig): ClashConfig {
 
     const {
         defaultProxies,
-        defaultProxiesDirect,
+        // 已清理废弃的 defaultProxiesDirect
         defaultSelector,
         defaultFallback,
         frontProxySelector,
@@ -100,17 +99,18 @@ function main(config: ClashConfig): ClashConfig {
     const proxyGroups = buildProxyGroups({
         landing,
         regexFilter,
-        countries,
+        // 已清理废弃的 countries 传参
         countryProxyGroups,
         lowCostNodes,
         landingNodes,
         defaultProxies,
-        defaultProxiesDirect,
+        // 已清理废弃的 defaultProxiesDirect 传参
         defaultSelector,
         defaultFallback,
         frontProxySelector,
     });
 
+    // 创建 GLOBAL 全局兜底组
     const globalProxies = proxyGroups.map((item) => String(item.name));
     proxyGroups.push({
         name: PROXY_GROUPS.GLOBAL,
@@ -154,6 +154,7 @@ function main(config: ClashConfig): ClashConfig {
         fakeIpFilter: FAKE_IP_FILTER,
     });
 
+    // 最终融合输出
     Object.assign(resultConfig, {
         "proxy-groups": proxyGroups,
         "rule-providers": ruleProviders,
