@@ -2,7 +2,7 @@
 powerfullz 的 Substore 订阅转换脚本
 https://github.com/powerfullz/override-rules
 
-支持的传入参数：
+支持的传入参数： 
 - loadbalance: 启用负载均衡（url-test/load-balance，默认 false）
 - landing: 启用落地节点功能（如机场家宽/星链/落地分组，默认 false）
 - ipv6: 启用 IPv6 支持（默认 false）
