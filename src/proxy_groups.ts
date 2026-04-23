@@ -76,7 +76,6 @@ export function buildProxyGroups({
     lowCostNodes,
     landingNodes,
     defaultProxies,
-    defaultProxiesDirect,
     defaultSelector,
     defaultFallback,
     frontProxySelector,
