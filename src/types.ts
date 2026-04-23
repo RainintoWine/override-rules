@@ -25,7 +25,7 @@ export interface ClashConfig extends UnknownRecord {
 export interface CountryMeta {
     weight?: number;
     pattern: string;
-    icon: string;
+    // 【已删除】icon: string; 彻底解除图标强制约束
 }
 
 export interface CountryInfoItem {
@@ -35,7 +35,7 @@ export interface CountryInfoItem {
 
 export interface BaseLists {
     defaultProxies: string[];
-    defaultProxiesDirect: string[];
+    // 【已删除】defaultProxiesDirect;
     defaultSelector: string[];
     defaultFallback: string[];
     frontProxySelector: string[];
@@ -67,7 +67,7 @@ export interface BuildProxyGroupsInput {
     lowCostNodes: string[];
     landingNodes: string[];
     defaultProxies: string[];
-    defaultProxiesDirect: string[];
+    // 【已删除】defaultProxiesDirect;
     defaultSelector: string[];
     defaultFallback: string[];
     frontProxySelector: string[];
