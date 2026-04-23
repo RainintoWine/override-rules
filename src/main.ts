@@ -99,7 +99,7 @@ function main(config: ClashConfig): ClashConfig {
     const proxyGroups = buildProxyGroups({
         landing,
         regexFilter,
-        // 已清理废弃的 countries 传参
+        countries,
         countryProxyGroups,
         lowCostNodes,
         landingNodes,
