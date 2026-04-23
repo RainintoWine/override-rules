@@ -1,0 +1,335 @@
+mixed-port: 7890
+redir-port: 7892
+tproxy-port: 7893
+routing-mark: 7894
+allow-lan: true
+bind-address: "*"
+ipv6: true
+mode: rule
+unified-delay: true
+tcp-concurrent: true
+find-process-mode: off
+log-level: info
+geodata-loader: standard
+external-controller: :9999
+disable-keep-alive: false
+profile:
+  store-selected: true
+proxy-groups:
+  - name: 选择代理
+    type: select
+    proxies:
+      - 自动选择
+      - 故障转移
+      - 手动选择
+      - 香港节点
+      - 台湾节点
+      - 日本节点
+      - 美国节点
+      - 新加坡节点
+      - 冷门节点
+      - 低倍率节点
+      - DIRECT
+    include-all: true
+  - name: 手动选择
+    include-all: true
+    type: select
+  - name: 自动选择
+    type: url-test
+    url: https://cp.cloudflare.com/generate_204
+    proxies: &a1
+      - 香港节点
+      - 台湾节点
+      - 日本节点
+      - 美国节点
+      - 新加坡节点
+      - 冷门节点
+      - 低倍率节点
+      - DIRECT
+    interval: 60
+    tolerance: 20
+  - name: 故障转移
+    type: fallback
+    url: https://cp.cloudflare.com/generate_204
+    proxies: *a1
+    interval: 60
+    tolerance: 20
+  - name: 加密货币
+    type: select
+    proxies: &a2
+      - 选择代理
+      - 手动选择
+      - 香港节点
+      - 台湾节点
+      - 日本节点
+      - 美国节点
+      - 新加坡节点
+      - 冷门节点
+      - 低倍率节点
+      - DIRECT
+    include-all: true
+  - name: AI服务
+    type: select
+    proxies: *a2
+    include-all: true
+  - name: YouTube
+    type: select
+    proxies: *a2
+    include-all: true
+  - name: 谷歌服务
+    type: select
+    proxies: *a2
+  - name: 微软服务
+    type: select
+    proxies: *a2
+  - name: 苹果服务
+    type: select
+    proxies: *a2
+  - name: 谷歌推送
+    type: select
+    proxies:
+      - 选择代理
+      - DIRECT
+      - 自动选择
+  - name: Telegram
+    type: select
+    proxies: *a2
+  - name: Spotify
+    type: select
+    proxies: *a2
+  - name: 哔哩哔哩
+    type: select
+    proxies:
+      - DIRECT
+      - 选择代理
+      - 自动选择
+  - name: Netflix
+    type: select
+    proxies: *a2
+  - name: TikTok
+    type: select
+    proxies: *a2
+  - name: 广告拦截
+    type: select
+    proxies:
+      - REJECT
+      - REJECT-DROP
+      - DIRECT
+  - name: 冷门节点
+    type: select
+    include-all: true
+    exclude-filter: (?i)香港|港|HK|hk|Hong
+      Kong|HongKong|hongkong|HKG|台|新北|彰化|TW|Taiwan|TPE|KHH|新加坡|坡|狮城|SG|Singapore|SIN|日本|川日|东京|大阪|泉日|埼玉|沪日|深日|[^-]日|JP|Japan|Tokyo|NRT|KIX|KR|Korea|KOR|Seoul|首尔|春川|韩|韓|ICN|美国|美|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|US|United
+      States|ATL|BUF|DFW|EWR|IAD|LAX|MCI|MIA|ORD|PHX|PDX|SEA|SJC|0\.[0-9]|低倍率|省流|实验性|免费|家宽|家庭宽带|商宽|商业宽带|星链|Starlink|落地
+  - name: 低倍率节点
+    type: url-test
+    url: https://cp.cloudflare.com/generate_204
+    interval: 60
+    tolerance: 20
+    include-all: true
+    filter: (?i)0\.[0-9]|低倍率|省流|实验性|免费
+  - name: 香港节点
+    type: load-balance
+    url: https://cp.cloudflare.com/generate_204
+    interval: 60
+    tolerance: 20
+    strategy: sticky-sessions
+    include-all: true
+    filter: 香港|港|HK|hk|Hong Kong|HongKong|hongkong|HKG|🇭🇰
+    exclude-filter: 0\.[0-9]|低倍率|省流|实验性|免费
+  - name: 台湾节点
+    type: load-balance
+    url: https://cp.cloudflare.com/generate_204
+    interval: 60
+    tolerance: 20
+    strategy: sticky-sessions
+    include-all: true
+    filter: 台|新北|彰化|TW|Taiwan|TPE|KHH|🇹🇼
+    exclude-filter: 0\.[0-9]|低倍率|省流|实验性|免费
+  - name: 日本节点
+    type: load-balance
+    url: https://cp.cloudflare.com/generate_204
+    interval: 60
+    tolerance: 20
+    strategy: sticky-sessions
+    include-all: true
+    filter: 日本|川日|东京|大阪|泉日|埼玉|沪日|深日|[^-]日|JP|Japan|Tokyo|NRT|KIX|🇯🇵
+    exclude-filter: 0\.[0-9]|低倍率|省流|实验性|免费
+  - name: 美国节点
+    type: load-balance
+    url: https://cp.cloudflare.com/generate_204
+    interval: 60
+    tolerance: 20
+    strategy: sticky-sessions
+    include-all: true
+    filter: 美国|美|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|US|United
+      States|ATL|BUF|DFW|EWR|IAD|LAX|MCI|MIA|ORD|PHX|PDX|SEA|SJC|🇺🇸
+    exclude-filter: 0\.[0-9]|低倍率|省流|实验性|免费
+  - name: 新加坡节点
+    type: load-balance
+    url: https://cp.cloudflare.com/generate_204
+    interval: 60
+    tolerance: 20
+    strategy: sticky-sessions
+    include-all: true
+    filter: 新加坡|坡|狮城|SG|Singapore|SIN|🇸🇬
+    exclude-filter: 0\.[0-9]|低倍率|省流|实验性|免费
+  - name: GLOBAL
+    include-all: true
+    type: select
+    proxies:
+      - 选择代理
+      - 手动选择
+      - 自动选择
+      - 故障转移
+      - 加密货币
+      - AI服务
+      - YouTube
+      - 谷歌服务
+      - 微软服务
+      - 苹果服务
+      - 谷歌推送
+      - Telegram
+      - Spotify
+      - 哔哩哔哩
+      - Netflix
+      - TikTok
+      - 广告拦截
+      - 冷门节点
+      - 低倍率节点
+      - 香港节点
+      - 台湾节点
+      - 日本节点
+      - 美国节点
+      - 新加坡节点
+rule-providers:
+  ADBlock:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    url: https://cdn.jsdelivr.net/gh/217heidai/adblockfilters@main/rules/adblockmihomolite.mrs
+    path: ./ruleset/ADBlock.mrs
+  TikTok:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    url: https://cdn.jsdelivr.net/gh/powerfullz/override-rules@master/ruleset/TikTok.list
+    path: ./ruleset/TikTok.list
+  SteamFix:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    url: https://cdn.jsdelivr.net/gh/powerfullz/override-rules@master/ruleset/SteamFix.list
+    path: ./ruleset/SteamFix.list
+  GoogleFCM:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    url: https://cdn.jsdelivr.net/gh/powerfullz/override-rules@master/ruleset/FirebaseCloudMessaging.list
+    path: ./ruleset/FirebaseCloudMessaging.list
+  AdditionalFilter:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    url: https://cdn.jsdelivr.net/gh/powerfullz/override-rules@master/ruleset/AdditionalFilter.list
+    path: ./ruleset/AdditionalFilter.list
+  Crypto:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    url: https://cdn.jsdelivr.net/gh/powerfullz/override-rules@master/ruleset/Crypto.list
+    path: ./ruleset/Crypto.list
+rules:
+  - AND,((DST-PORT,443),(NETWORK,UDP)),REJECT
+  - RULE-SET,ADBlock,广告拦截
+  - RULE-SET,AdditionalFilter,广告拦截
+  - RULE-SET,Crypto,加密货币
+  - RULE-SET,TikTok,TikTok
+  - RULE-SET,SteamFix,DIRECT
+  - RULE-SET,GoogleFCM,谷歌推送
+  - GEOSITE,YOUTUBE,YouTube
+  - GEOSITE,TELEGRAM,Telegram
+  - GEOSITE,CATEGORY-AI-!CN,AI服务
+  - GEOSITE,GOOGLE-PLAY@CN,DIRECT
+  - GEOSITE,MICROSOFT@CN,DIRECT
+  - GEOSITE,APPLE,苹果服务
+  - GEOSITE,MICROSOFT,微软服务
+  - GEOSITE,GOOGLE,谷歌服务
+  - GEOSITE,NETFLIX,Netflix
+  - GEOSITE,SPOTIFY,Spotify
+  - GEOSITE,BILIBILI,哔哩哔哩
+  - GEOSITE,GFW,选择代理
+  - GEOSITE,CN,DIRECT
+  - GEOSITE,PRIVATE,DIRECT
+  - GEOIP,NETFLIX,Netflix,no-resolve
+  - GEOIP,TELEGRAM,Telegram,no-resolve
+  - GEOIP,CN,DIRECT
+  - GEOIP,PRIVATE,DIRECT
+  - MATCH,选择代理
+sniffer:
+  sniff:
+    TLS:
+      ports:
+        - 443
+        - 8443
+    HTTP:
+      ports:
+        - 80
+        - 8080
+        - 8880
+    QUIC:
+      ports:
+        - 443
+        - 8443
+  override-destination: false
+  enable: true
+  force-dns-mapping: true
+  skip-domain:
+    - Mijia Cloud
+    - dlg.io.mi.com
+    - +.push.apple.com
+dns:
+  enable: true
+  ipv6: true
+  prefer-h3: true
+  enhanced-mode: fake-ip
+  default-nameserver:
+    - 119.29.29.29
+    - 223.5.5.5
+  nameserver:
+    - system
+    - 223.5.5.5
+    - 119.29.29.29
+    - 180.184.1.1
+  fallback:
+    - quic://dns0.eu
+    - https://dns.cloudflare.com/dns-query
+    - https://dns.sb/dns-query
+    - tcp://208.67.222.222
+    - tcp://8.26.56.2
+  proxy-server-nameserver:
+    - https://dns.alidns.com/dns-query
+    - tls://dot.pub
+  fake-ip-filter:
+    - geosite:private
+    - geosite:connectivity-check
+    - geosite:cn
+    - Mijia Cloud
+    - dig.io.mi.com
+    - localhost.ptlogin2.qq.com
+    - "*.icloud.com"
+    - "*.stun.*.*"
+    - "*.stun.*.*.*"
+geodata-mode: true
+geox-url:
+  geoip: https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat
+  geosite: https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat
+  mmdb: https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb
+  asn: https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/GeoLite2-ASN.mmdb
+
