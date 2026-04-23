@@ -14,6 +14,9 @@ import type {
     ProxyGroup,
 } from "./types";
 
+/**
+ * 地区节点生成器：根据 countriesMeta 自动生成各个国家的 url-test 策略组。
+ */
 export function buildCountryProxyGroups({
     countries,
     landing,
@@ -34,6 +37,7 @@ export function buildCountryProxyGroups({
 
         const groupConfig: ProxyGroup = {
             name: `${country}${NODE_SUFFIX}`,
+            // 对齐极简设计，不再从 meta 中读取 icon
             type: groupType,
             url: "https://cp.cloudflare.com/generate_204",
             interval: 60,
@@ -62,10 +66,12 @@ export function buildCountryProxyGroups({
     return groups;
 }
 
+/**
+ * 主面板策略组装配线：决定客户端面板上所有策略组的顺序及内容。
+ */
 export function buildProxyGroups({
     landing,
     regexFilter,
-    countries,
     countryProxyGroups,
     lowCostNodes,
     landingNodes,
@@ -75,13 +81,15 @@ export function buildProxyGroups({
     defaultFallback,
     frontProxySelector,
 }: BuildProxyGroupsInput): ProxyGroup[] {
+    
+    // 所有的硬编码地区雷达（hasTW, hasHK, hasUS）已被删除，实现彻底的地区去中心化
 
-    // 严格按照 constants.ts 中的 PROXY_GROUPS 顺序排列，已清理所有废弃分组
     const groups: Array<ProxyGroup | null> = [
         {
             name: PROXY_GROUPS.SELECT,
-            "include-all": true,
             type: "select",
+            proxies: defaultSelector,
+            "include-all": true, // 一拉到底模式
         },
         {
             name: PROXY_GROUPS.MANUAL,
@@ -128,18 +136,21 @@ export function buildProxyGroups({
             : null,
         {
             name: PROXY_GROUPS.CRYPTO,
-            "include-all": true,
             type: "select",
+            proxies: defaultProxies,
+            "include-all": true, // 一拉到底模式
         },
         {
             name: PROXY_GROUPS.AI_SERVICE,
-            "include-all": true,
             type: "select",
+            proxies: defaultProxies,
+            "include-all": true, // 一拉到底模式
         },
         {
             name: PROXY_GROUPS.YOUTUBE,
-            "include-all": true,
             type: "select",
+            proxies: defaultProxies,
+            "include-all": true, // 一拉到底模式
         },
         {
             name: PROXY_GROUPS.GOOGLE,
@@ -189,6 +200,7 @@ export function buildProxyGroups({
         {
             name: PROXY_GROUPS.AD_BLOCK,
             type: "select",
+            // 使用原生字符串 "DIRECT" 替代已删除的 PROXY_GROUPS.DIRECT
             proxies: ["REJECT", "REJECT-DROP", "DIRECT"],
         },
         {
