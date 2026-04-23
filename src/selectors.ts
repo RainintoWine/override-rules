@@ -61,7 +61,6 @@ export function buildBaseLists({
 
     return {
         defaultProxies,
-        defaultProxiesDirect,
         defaultSelector,
         defaultFallback,
         frontProxySelector,
